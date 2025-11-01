@@ -1,18 +1,21 @@
-<!-- index.html -->
 <link rel="manifest" href="manifest.json">
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
       .then(() => console.log('Service Worker registered'))
-      .catch(err => console.error('SW failed', err));
+      .catch(err => console.error('SW registration failed:', err));
   }
 </script>
 <div class="invoice-form">
-  <input type="text" id="clientName" placeholder="Nama Klien">
+  <input type="text" id="invoiceNumber" placeholder="No Invoice">
   <input type="date" id="invoiceDate">
-  <textarea id="items" placeholder="Item dan Harga (format: Item - RpX)"></textarea>
+  <input type="text" id="clientName" placeholder="Nama Klien">
+  <textarea id="clientAddress" placeholder="Alamat Klien"></textarea>
+  <input type="file" id="logoUpload" accept="image/*">
+  <textarea id="items" placeholder="Item - Qty - Harga"></textarea>
   <button onclick="generateInvoice()">Preview</button>
   <button onclick="exportPDF()">Export PDF</button>
   <button onclick="exportWord()">Export Word</button>
 </div>
-<div id="invoicePreview"></div>
+
+<div id="invoicePreview" contenteditable="true"></div>
