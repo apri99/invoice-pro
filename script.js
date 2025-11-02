@@ -1,57 +1,59 @@
-function generateInvoice() {
-  const number = document.getElementById('invoiceNumber').value;
-  const date = document.getElementById('invoiceDate').value;
-  const name = document.getElementById('clientName').value;
-  const address = document.getElementById('clientAddress').value;
-  const itemsRaw = document.getElementById('items').value.split('\n');
-  const logoFile = document.getElementById('logoUpload').files[0];
+document.getElementById('logoUpload').addEventListener('change', function() {
+  const file = this.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('logoPreview').innerHTML = `<img src="${e.target.result}" style="max-height:100px;">`;
+  };
+  reader.readAsDataURL(file);
+});
 
-  let logoHTML = '';
-  if (logoFile) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      logoHTML = `<img src="${e.target.result}" style="max-width:150px;">`;
-      renderInvoice();
-    };
-    reader.readAsDataURL(logoFile);
-  } else {
-    renderInvoice();
-  }
-
-  function renderInvoice() {
-    let itemsHTML = '';
-    itemsRaw.forEach(line => {
-      const [desc, qty, price] = line.split('-');
-      const subtotal = parseInt(qty) * parseInt(price);
-      itemsHTML += `<tr><td>${desc}</td><td>${qty}</td><td>${price}</td><td>${subtotal}</td></tr>`;
-    });
-
-    const html = `
-      ${logoHTML}
-      <h2>INVOICE</h2>
-      <p>No: ${number}</p><p>Tanggal: ${date}</p>
-      <h3>Kepada: ${name}</h3><p>${address}</p>
-      <table border="1" cellpadding="5">
-        <tr><th>Deskripsi</th><th>Qty</th><th>Harga</th><th>Subtotal</th></tr>
-        ${itemsHTML}
-      </table>
-    `;
-    document.getElementById('invoicePreview').innerHTML = html;
-    localStorage.setItem('lastInvoice', html);
-  }
+function addItem() {
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td contenteditable="true">Deskripsi</td>
+    <td contenteditable="true">100000</td>
+    <td contenteditable="true">1</td>
+    <td>Rp 100000</td>
+    <td><button onclick="removeItem(this)">🗑️</button></td>
+  `;
+  document.querySelector('#itemTable tbody').appendChild(row);
+  updateTotals();
 }
+
+function removeItem(btn) {
+  btn.parentElement.parentElement.remove();
+  updateTotals();
+}
+
+function updateTotals() {
+  let subtotal = 0;
+  document.querySelectorAll('#itemTable tbody tr').forEach(row => {
+    const price = parseInt(row.children[1].innerText) || 0;
+    const qty = parseInt(row.children[2].innerText) || 0;
+    const total = price * qty;
+    row.children[3].innerText = `Rp ${total}`;
+    subtotal += total;
+  });
+  document.getElementById('subtotal').innerText = `Rp ${subtotal}`;
+  const taxRate = parseInt(document.getElementById('tax').value) || 0;
+  const total = subtotal + (subtotal * taxRate / 100);
+  document.getElementById('total').innerText = `Rp ${total}`;
+}
+
+document.getElementById('tax').addEventListener('input', updateTotals);
 
 function exportPDF() {
   const doc = new jsPDF();
-  doc.fromHTML(document.getElementById('invoicePreview').innerHTML, 15, 15);
+  doc.fromHTML(document.querySelector('.invoice-container'), 15, 15);
   doc.save('invoice.pdf');
 }
 
 function exportWord() {
-  const content = document.getElementById('invoicePreview').innerHTML;
+  const content = document.querySelector('.invoice-container').innerHTML;
   const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'invoice.doc';
   link.click();
 }
+
