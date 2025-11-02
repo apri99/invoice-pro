@@ -6,18 +6,24 @@
   <title>InvoicePro</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body>
   <div class="invoice-container">
     <header>
-      <div class="logo-area">
-        <input type="file" id="logoUpload" accept="image/*">
+      <div class="logo-area no-print">
+        <input type="file" id="logoUpload">
         <div id="logoPreview">LOGO USAHA</div>
       </div>
       <div class="invoice-meta">
         <h1>FAKTUR PEMBAYARAN</h1>
         <p>Faktur: <input type="text" id="invoiceNumber" value="00224"></p>
         <p>Tanggal: <input type="date" id="invoiceDate" value="2025-11-02"></p>
+        <select id="themeSelector" onchange="applyTheme(this.value)" class="no-print">
+          <option value="default">Default</option>
+          <option value="dark">Dark</option>
+          <option value="promo">Promo</option>
+        </select>
       </div>
     </header>
 
@@ -40,11 +46,11 @@
 
     <table id="itemTable">
       <thead>
-        <tr><th>DESKRIPSI BARANG</th><th>HARGA</th><th>JUMLAH</th><th>TOTAL</th><th></th></tr>
+        <tr><th>DESKRIPSI BARANG</th><th>HARGA</th><th>JUMLAH</th><th>TOTAL</th><th class="no-print"></th></tr>
       </thead>
       <tbody></tbody>
     </table>
-    <button onclick="addItem()">+ Tambah Item</button>
+    <button onclick="addItem()" class="no-print">+ Tambah Item</button>
 
     <section class="summary">
       <p>SUB TOTAL: <span id="subtotal">Rp 0</span></p>
@@ -64,7 +70,7 @@
       <div contenteditable="true" id="terms">Pembayaran maksimal 7 hari setelah faktur diterima.</div>
     </section>
 
-    <footer>
+    <footer class="no-print">
       <button onclick="exportPDF()">Export PDF</button>
       <button onclick="exportWord()">Export Word</button>
     </footer>
