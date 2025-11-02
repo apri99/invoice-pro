@@ -1,7 +1,7 @@
-document.getElementById('logoUpload').addEventListener('change', function() {
+document.getElementById('logoUpload').addEventListener('change', function () {
   const file = this.files[0];
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = function (e) {
     document.getElementById('logoPreview').innerHTML = `<img src="${e.target.result}" style="max-height:100px;">`;
   };
   reader.readAsDataURL(file);
@@ -32,6 +32,13 @@ function updateTotals() {
     const qty = parseInt(row.children[2].innerText) || 0;
     const total = price * qty;
     row.children[3].innerText = `Rp ${total}`;
+    subtotal +=function updateTotals() {
+  let subtotal = 0;
+  document.querySelectorAll('#itemTable tbody tr').forEach(row => {
+    const price = parseInt(row.children[1].innerText) || 0;
+    const qty = parseInt(row.children[2].innerText) || 0;
+    const total = price * qty;
+    row.children[3].innerText = `Rp ${total}`;
     subtotal += total;
   });
   document.getElementById('subtotal').innerText = `Rp ${subtotal}`;
@@ -43,8 +50,6 @@ function updateTotals() {
 document.getElementById('tax').addEventListener('input', updateTotals);
 
 function applyTheme(theme) {
-  const root = document.documentElement;
-  if (theme === 'dark')function applyTheme(theme) {
   const root = document.documentElement;
   if (theme === 'dark') {
     root.style.setProperty('--color-header', '#1C1C1C');
@@ -63,7 +68,6 @@ function applyTheme(theme) {
     root.style.setProperty('--color-border', '#FFCC80');
     root.style.setProperty('--color-button', '#E64A19');
   } else {
-    // Reset ke default
     root.style.setProperty('--color-header', '#2C3E50');
     root.style.setProperty('--color-subheader', '#34495E');
     root.style.setProperty('--color-highlight', '#E74C3C');
@@ -74,28 +78,34 @@ function applyTheme(theme) {
   }
 }
 
-function exportPDF() {
-  const clone = document.querySelector('.invoice-container').cloneNode(true);
-  clone.querySelectorAll('.no-print').forEach(el => el.remove());
+async function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const invoice = document.querySelector('.invoice-container');
 
-  const tempDiv = document.createElement('div');
-  tempDiv.style.display = 'none';
-  tempDiv.appendChild(clone);
-  document.body.appendChild(tempDiv);
+  document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
 
-  const doc = new jsPDF();
-  doc.fromHTML(tempDiv.innerHTML, 15, 15);
-  doc.save('invoice.pdf');
+  const canvas = await html2canvas(invoice);
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const width = pdf.internal.pageSize.getWidth();
+  const height = (canvas.height * width) / canvas.width;
+  pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+  pdf.save('invoice.pdf');
 
-  document.body.removeChild(tempDiv);
+  document.querySelectorAll('.no-print').forEach(el => el.style.display = '');
 }
 
 function exportWord() {
   const clone = document.querySelector('.invoice-container').cloneNode(true);
   clone.querySelectorAll('.no-print').forEach(el => el.remove());
 
-  const content = clone.innerHTML;
-  const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+  const html = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    <head><meta charset='utf-8'></head>
+    <body>${clone.innerHTML}</body></html>
+  `;
+
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'invoice.doc';
