@@ -1,6 +1,7 @@
 body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: 'Segoe UI', sans-serif;
-  background: #f4f4f4;
   margin: 0;
   padding: 1rem;
 }
@@ -12,21 +13,24 @@ body {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 header {
+  background-color: var(--color-header);
+  color: var(--color-button-text);
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.logo-area {
-  width: 150px;
+.invoice-meta h1, .invoice-meta p {
+  color: var(--color-button-text);
 }
-#logoPreview {
-  width: 100%;
-  height: 100px;
-  background: #eee;
+.logo-area #logoPreview {
+  background-color: #ECF0F1;
+  color: var(--color-header);
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  height: 100px;
 }
 .info-section {
   display: flex;
@@ -40,17 +44,34 @@ header {
 }
 table {
   width: 100%;
-  margin-top: 1rem;
   border-collapse: collapse;
+  margin-top: 1rem;
 }
-th, td {
-  border: 1px solid #ccc;
+table th {
+  background-color: var(--color-subheader);
+  color: var(--color-button-text);
   padding: 0.5rem;
 }
-.summary, .payment-info, .notes {
-  margin-top: 1rem;
+table td {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  padding: 0.5rem;
 }
-footer {
-  margin-top: 2rem;
-  text-align: center;
+button {
+  background-color: var(--color-button);
+  color: var(--color-button-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+.summary #total {
+  color: var(--color-highlight);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
