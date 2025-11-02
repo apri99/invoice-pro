@@ -1,21 +1,75 @@
-<link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker registered'))
-      .catch(err => console.error('SW registration failed:', err));
-  }
-</script>
-<div class="invoice-form">
-  <input type="text" id="invoiceNumber" placeholder="No Invoice">
-  <input type="date" id="invoiceDate">
-  <input type="text" id="clientName" placeholder="Nama Klien">
-  <textarea id="clientAddress" placeholder="Alamat Klien"></textarea>
-  <input type="file" id="logoUpload" accept="image/*">
-  <textarea id="items" placeholder="Item - Qty - Harga"></textarea>
-  <button onclick="generateInvoice()">Preview</button>
-  <button onclick="exportPDF()">Export PDF</button>
-  <button onclick="exportWord()">Export Word</button>
-</div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvoicePro</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="invoice-container">
+    <header>
+      <div class="logo-area">
+        <input type="file" id="logoUpload" accept="image/*">
+        <div id="logoPreview">LOGO USAHA</div>
+      </div>
+      <div class="invoice-meta">
+        <h1>FAKTUR PEMBAYARAN</h1>
+        <p>Faktur: <input type="text" id="invoiceNumber" value="00224"></p>
+        <p>Tanggal: <input type="date" id="invoiceDate" value="2025-11-02"></p>
+      </div>
+    </header>
 
-<div id="invoicePreview" contenteditable="true"></div>
+    <section class="info-section">
+      <div>
+        <h3>Nama Usaha</h3>
+        <input type="text" id="senderName" value="WarungDigital99">
+        <input type="text" id="senderAddress" value="Jl. Modular No.99">
+        <input type="text" id="senderPhone" value="+62-812-3456-7890">
+        <input type="email" id="senderEmail" value="team@warungdigital99.com">
+      </div>
+      <div>
+        <h3>Kepada</h3>
+        <input type="text" id="clientName" value="Om Apri">
+        <input type="text" id="clientAddress" value="Tasikmalaya, Indonesia">
+        <input type="text" id="clientPhone" value="+62-812-0000-0000">
+        <input type="email" id="clientEmail" value="omapri@email.com">
+      </div>
+    </section>
+
+    <table id="itemTable">
+      <thead>
+        <tr><th>DESKRIPSI BARANG</th><th>HARGA</th><th>JUMLAH</th><th>TOTAL</th><th></th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button onclick="addItem()">+ Tambah Item</button>
+
+    <section class="summary">
+      <p>SUB TOTAL: <span id="subtotal">Rp 0</span></p>
+      <p>PAJAK: <input type="number" id="tax" value="0">%</p>
+      <p>TOTAL: <span id="total">Rp 0</span></p>
+    </section>
+
+    <section class="payment-info">
+      <h3>CARA PEMBAYARAN</h3>
+      <input type="text" id="bankName" value="Bank Modular">
+      <input type="text" id="accountName" value="Om Apri">
+      <input type="text" id="accountNumber" value="123-456-7890">
+    </section>
+
+    <section class="notes">
+      <h3>SYARAT & KETENTUAN</h3>
+      <div contenteditable="true" id="terms">Pembayaran maksimal 7 hari setelah faktur diterima.</div>
+    </section>
+
+    <footer>
+      <button onclick="exportPDF()">Export PDF</button>
+      <button onclick="exportWord()">Export Word</button>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
