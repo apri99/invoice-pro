@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2C3E50",
-  "description": "Invoice generator with editable fields and export features.",
+  "description": "A modular invoice generator with editable fields and export to PDF/Word.",
   "icons": [
     {
       "src": "assets/logo.png",
