@@ -32,13 +32,6 @@ function updateTotals() {
     const qty = parseInt(row.children[2].innerText) || 0;
     const total = price * qty;
     row.children[3].innerText = `Rp ${total}`;
-    subtotal +=function updateTotals() {
-  let subtotal = 0;
-  document.querySelectorAll('#itemTable tbody tr').forEach(row => {
-    const price = parseInt(row.children[1].innerText) || 0;
-    const qty = parseInt(row.children[2].innerText) || 0;
-    const total = price * qty;
-    row.children[3].innerText = `Rp ${total}`;
     subtotal += total;
   });
   document.getElementById('subtotal').innerText = `Rp ${subtotal}`;
