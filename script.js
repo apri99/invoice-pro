@@ -14,7 +14,7 @@ function addItem() {
     <td contenteditable="true">100000</td>
     <td contenteditable="true">1</td>
     <td>Rp 100000</td>
-    <td><button onclick="removeItem(this)">🗑️</button></td>
+    <td class="no-print"><button onclick="removeItem(this)">🗑️</button></td>
   `;
   document.querySelector('#itemTable tbody').appendChild(row);
   updateTotals();
@@ -42,18 +42,62 @@ function updateTotals() {
 
 document.getElementById('tax').addEventListener('input', updateTotals);
 
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === 'dark')function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === 'dark') {
+    root.style.setProperty('--color-header', '#1C1C1C');
+    root.style.setProperty('--color-subheader', '#333333');
+    root.style.setProperty('--color-highlight', '#FF6B6B');
+    root.style.setProperty('--color-bg', '#121212');
+    root.style.setProperty('--color-text', '#EEEEEE');
+    root.style.setProperty('--color-border', '#444444');
+    root.style.setProperty('--color-button', '#4CAF50');
+  } else if (theme === 'promo') {
+    root.style.setProperty('--color-header', '#FF9800');
+    root.style.setProperty('--color-subheader', '#F57C00');
+    root.style.setProperty('--color-highlight', '#D32F2F');
+    root.style.setProperty('--color-bg', '#FFF3E0');
+    root.style.setProperty('--color-text', '#212121');
+    root.style.setProperty('--color-border', '#FFCC80');
+    root.style.setProperty('--color-button', '#E64A19');
+  } else {
+    // Reset ke default
+    root.style.setProperty('--color-header', '#2C3E50');
+    root.style.setProperty('--color-subheader', '#34495E');
+    root.style.setProperty('--color-highlight', '#E74C3C');
+    root.style.setProperty('--color-bg', '#F9F9F9');
+    root.style.setProperty('--color-text', '#2C3E50');
+    root.style.setProperty('--color-border', '#BDC3C7');
+    root.style.setProperty('--color-button', '#27AE60');
+  }
+}
+
 function exportPDF() {
+  const clone = document.querySelector('.invoice-container').cloneNode(true);
+  clone.querySelectorAll('.no-print').forEach(el => el.remove());
+
+  const tempDiv = document.createElement('div');
+  tempDiv.style.display = 'none';
+  tempDiv.appendChild(clone);
+  document.body.appendChild(tempDiv);
+
   const doc = new jsPDF();
-  doc.fromHTML(document.querySelector('.invoice-container'), 15, 15);
+  doc.fromHTML(tempDiv.innerHTML, 15, 15);
   doc.save('invoice.pdf');
+
+  document.body.removeChild(tempDiv);
 }
 
 function exportWord() {
-  const content = document.querySelector('.invoice-container').innerHTML;
+  const clone = document.querySelector('.invoice-container').cloneNode(true);
+  clone.querySelectorAll('.no-print').forEach(el => el.remove());
+
+  const content = clone.innerHTML;
   const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'invoice.doc';
   link.click();
 }
-
