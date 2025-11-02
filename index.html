@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>InvoicePro</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="theme.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="theme.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="invoice-container">
     <header>
       <div class="logo-area no-print">
-        <input type="file" id="logoUpload">
+        <input type="file" id="logoUpload" />
         <div id="logoPreview">LOGO USAHA</div>
       </div>
       <div class="invoice-meta">
         <h1>FAKTUR PEMBAYARAN</h1>
-        <p>Faktur: <input type="text" id="invoiceNumber" value="00224"></p>
-        <p>Tanggal: <input type="date" id="invoiceDate" value="2025-11-02"></p>
+        <p>Faktur: <input type="text" id="invoiceNumber" value="00224" /></p>
+        <p>Tanggal: <input type="date" id="invoiceDate" value="2025-11-02" /></p>
         <select id="themeSelector" onchange="applyTheme(this.value)" class="no-print">
           <option value="default">Default</option>
           <option value="dark">Dark</option>
@@ -30,23 +32,29 @@
     <section class="info-section">
       <div>
         <h3>Nama Usaha</h3>
-        <input type="text" id="senderName" value="WarungDigital99">
-        <input type="text" id="senderAddress" value="Jl. Modular No.99">
-        <input type="text" id="senderPhone" value="+62-812-3456-7890">
-        <input type="email" id="senderEmail" value="team@warungdigital99.com">
+        <input type="text" id="senderName" value="WarungDigital99" />
+        <input type="text" id="senderAddress" value="Jl. Modular No.99" />
+        <input type="text" id="senderPhone" value="+62-812-3456-7890" />
+        <input type="email" id="senderEmail" value="team@warungdigital99.com" />
       </div>
       <div>
         <h3>Kepada</h3>
-        <input type="text" id="clientName" value="Om Apri">
-        <input type="text" id="clientAddress" value="Tasikmalaya, Indonesia">
-        <input type="text" id="clientPhone" value="+62-812-0000-0000">
-        <input type="email" id="clientEmail" value="omapri@email.com">
+        <input type="text" id="clientName" value="Om Apri" />
+        <input type="text" id="clientAddress" value="Tasikmalaya, Indonesia" />
+        <input type="text" id="clientPhone" value="+62-812-0000-0000" />
+        <input type="email" id="clientEmail" value="omapri@email.com" />
       </div>
     </section>
 
     <table id="itemTable">
       <thead>
-        <tr><th>DESKRIPSI BARANG</th><th>HARGA</th><th>JUMLAH</th><th>TOTAL</th><th class="no-print"></th></tr>
+        <tr>
+          <th>DESKRIPSI BARANG</th>
+          <th>HARGA</th>
+          <th>JUMLAH</th>
+          <th>TOTAL</th>
+          <th class="no-print"></th>
+        </tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -54,15 +62,15 @@
 
     <section class="summary">
       <p>SUB TOTAL: <span id="subtotal">Rp 0</span></p>
-      <p>PAJAK: <input type="number" id="tax" value="0">%</p>
+      <p>PAJAK: <input type="number" id="tax" value="0" />%</p>
       <p>TOTAL: <span id="total">Rp 0</span></p>
     </section>
 
     <section class="payment-info">
       <h3>CARA PEMBAYARAN</h3>
-      <input type="text" id="bankName" value="Bank Modular">
-      <input type="text" id="accountName" value="Om Apri">
-      <input type="text" id="accountNumber" value="123-456-7890">
+      <input type="text" id="bankName" value="Bank Modular" />
+      <input type="text" id="accountName" value="Om Apri" />
+      <input type="text" id="accountNumber" value="123-456-7890" />
     </section>
 
     <section class="notes">
