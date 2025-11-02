@@ -4,8 +4,8 @@
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
-  "description": "A professional invoice generator with PDF and Word export, editable fields, and PWA support.",
+  "theme_color": "#2C3E50",
+  "description": "Invoice generator with editable fields and export features.",
   "icons": [
     {
       "src": "assets/logo.png",
